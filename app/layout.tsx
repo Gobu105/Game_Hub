@@ -10,6 +10,8 @@ export const metadata: Metadata = {
   description: "A showcase of small games, apps, and stupid ideas.",
 };
 
+import { SpeedInsights } from "@vercel/speed-insights/next";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -25,6 +27,7 @@ export default function RootLayout({
         <footer className="border-t border-gray-800 bg-gray-950 py-8 mt-12 text-center text-gray-500 text-sm">
           <p>© {new Date().getFullYear()} GameHub. Built with Next.js.</p>
         </footer>
+        <SpeedInsights />
       </body>
     </html>
   );

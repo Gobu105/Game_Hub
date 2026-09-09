@@ -37,31 +37,4 @@ export async function logout() {
   redirect('/login')
 }
 
-// NEW: OAuth Functions (Google & GitHub)
-export async function signInWithGoogle() {
-  const supabase = await createClient()
-  const origin = (await headers()).get('origin')
-  
-  const { data, error } = await supabase.auth.signInWithOAuth({
-    provider: 'google',
-    options: {
-      redirectTo: `${origin}/auth/callback`,
-    },
-  })
-  
-  if (data.url) redirect(data.url)
-}
-
-export async function signInWithGithub() {
-  const supabase = await createClient()
-  const origin = (await headers()).get('origin')
-  
-  const { data, error } = await supabase.auth.signInWithOAuth({
-    provider: 'github',
-    options: {
-      redirectTo: `${origin}/auth/callback`,
-    },
-  })
-  
-  if (data.url) redirect(data.url)
-}
+// Removed OAuth functions as per user request
