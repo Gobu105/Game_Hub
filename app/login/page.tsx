@@ -1,10 +1,18 @@
 import { login, signup } from './actions'
 
-export default function LoginPage() {
+export default async function LoginPage({ searchParams }: { searchParams: Promise<{ error?: string }> }) {
+  const resolvedParams = await searchParams;
+  
   return (
     <div className="flex items-center justify-center min-h-[70vh] py-10">
       <div className="bg-gray-900 border border-gray-800 p-8 rounded-xl shadow-xl w-full max-w-md flex flex-col gap-6">
         <h2 className="text-2xl font-bold text-white text-center">Welcome to GameHub</h2>
+        
+        {resolvedParams.error && (
+          <div className="bg-red-900/50 border border-red-500 text-red-200 px-4 py-3 rounded-lg text-sm">
+            {resolvedParams.error}
+          </div>
+        )}
         
         {/* Email Form */}
         <form className="flex flex-col gap-4">

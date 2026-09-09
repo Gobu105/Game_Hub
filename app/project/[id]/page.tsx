@@ -1,13 +1,21 @@
 import { notFound } from 'next/navigation';
 import { ArrowLeft, Play, Star, Bug, MessageSquare, CheckCircle, Clock } from 'lucide-react';
 import Link from 'next/link';
-import { supabase } from '@/lib/supabase';
+import { supabase as getSupabase } from '@/lib/supabase';
+import { createClient } from '@/utils/supabase/server';
+import FeedbackForm from './FeedbackForm';
 
 export const revalidate = 0;
 
 export default async function ProjectPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = await params;
+  const serverSupabase = await createClient();
+  const { data: { user } } = await serverSupabase.auth.getUser();
   
+  // Use the anon client for public reads to avoid row level security issues if configured poorly, 
+  // but since we turned off RLS it doesn't matter much.
+  const supabase = getSupabase;
+
   // Fetch project
   const { data: project } = await supabase
     .from('projects')
@@ -84,6 +92,8 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
 
       {/* Community Section (Play Store Style) */}
       <div className="mb-16">
+        <FeedbackForm projectId={project.id} isLoggedIn={!!user} />
+
         <h2 className="text-3xl font-bold mb-8">Community & Feedback</h2>
         
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
