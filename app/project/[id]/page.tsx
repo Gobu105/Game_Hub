@@ -5,7 +5,7 @@ import { supabase as getSupabase } from '@/lib/supabase';
 import { createClient } from '@/utils/supabase/server';
 import FeedbackForm from './FeedbackForm';
 
-export const revalidate = 0;
+export const dynamic = 'force-dynamic';
 
 export default async function ProjectPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = await params;
