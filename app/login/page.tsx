@@ -38,7 +38,19 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
             />
           </div>
 
-          <div className="flex gap-4 mt-2">
+          <div>
+            <label className="block text-sm font-medium text-gray-400 mb-1" htmlFor="role">Sign Up As (Only applies to new accounts)</label>
+            <select
+              className="w-full px-4 py-2 bg-gray-950 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-indigo-500"
+              id="role"
+              name="role"
+            >
+              <option value="user">Regular User (Play Games & Review)</option>
+              <option value="developer">Developer (Submit Games)</option>
+            </select>
+          </div>
+
+          <div className="flex gap-4 mt-4">
             <button formAction={login} className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-lg font-medium transition-colors">
               Log in
             </button>
