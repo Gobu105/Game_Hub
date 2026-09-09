@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 import SettingsForm from '../dashboard/SettingsForm';
 import SubmitGameForm from './SubmitGameForm';
 import DeveloperReplyForm from './DeveloperReplyForm';
+import EditGameForm from './EditGameForm';
 import { MessageSquare, Bug } from 'lucide-react';
 
 export const revalidate = 0;
@@ -69,6 +70,9 @@ export default async function DeveloperDashboard() {
                     </h3>
                     <p className="text-sm text-gray-400">{project.tagline}</p>
                   </div>
+                </div>
+                <div>
+                  <EditGameForm project={project} />
                 </div>
               </div>
             ))}

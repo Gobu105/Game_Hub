@@ -33,6 +33,37 @@ export async function submitProject(formData: FormData) {
   return { success: true }
 }
 
+export async function editProject(formData: FormData) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  if (!user) return { error: 'Not authenticated' }
+
+  const projectId = formData.get('project_id') as string
+  const title = formData.get('title') as string
+  const tagline = formData.get('tagline') as string
+  const overview = formData.get('overview') as string
+  const link = formData.get('link') as string
+  const icon = formData.get('icon') as string
+  const github_url = formData.get('github_url') as string
+
+  // Update only if they own it
+  const { error } = await supabase.from('projects').update({
+    title,
+    tagline,
+    overview,
+    link,
+    icon,
+    github_url,
+  }).match({ id: projectId, developer_id: user.id })
+
+  if (error) return { error: error.message }
+  
+  revalidatePath('/developer')
+  revalidatePath(`/project/${projectId}`, 'page')
+  return { success: true }
+}
+
 export async function replyToComment(formData: FormData) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
