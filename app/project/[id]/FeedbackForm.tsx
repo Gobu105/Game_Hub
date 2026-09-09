@@ -29,8 +29,9 @@ export default function FeedbackForm({ projectId, isLoggedIn }: { projectId: str
       setMessage(`Error: ${result.error}`)
     } else if (result.success) {
       setMessage('Successfully submitted! Thank you.')
-      // Reset form (this is a simple way without refs for now)
-      document.getElementById('feedback-form')?.reset()
+      // Reset form
+      const form = document.getElementById('feedback-form') as HTMLFormElement
+      form?.reset()
     }
     
     setLoading(false)
