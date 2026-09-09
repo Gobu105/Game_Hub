@@ -6,10 +6,11 @@ import { supabase } from '@/lib/supabase';
 export const dynamic = 'force-dynamic';
 
 export default async function Home() {
-  // Fetch projects from Supabase
+  // Fetch approved projects from Supabase
   const { data: projects, error } = await supabase
     .from('projects')
     .select('*')
+    .eq('status', 'approved')
     .order('created_at', { ascending: false });
 
   if (error) {
