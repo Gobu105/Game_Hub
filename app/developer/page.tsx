@@ -1,5 +1,6 @@
 import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
+import SettingsForm from '../dashboard/SettingsForm';
 
 export const revalidate = 0;
 
@@ -62,6 +63,8 @@ export default async function DeveloperDashboard() {
           </div>
         )}
       </div>
+
+      <SettingsForm />
     </div>
   );
 }
