@@ -1,7 +1,21 @@
 import ProjectCard from '@/components/ProjectCard';
-import { projects } from '@/lib/data';
+import { supabase } from '@/lib/supabase';
 
-export default function Home() {
+// Setting this prevents Next.js from caching the page statically at build time,
+// ensuring it always fetches the latest data from Supabase.
+export const revalidate = 0;
+
+export default async function Home() {
+  // Fetch projects from Supabase
+  const { data: projects, error } = await supabase
+    .from('projects')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error('Error fetching projects:', error);
+  }
+
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
       
@@ -23,7 +37,7 @@ export default function Home() {
         <h2 className="text-3xl font-bold mb-8">All Projects</h2>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {projects.map((project) => (
+          {projects?.map((project) => (
             <ProjectCard key={project.id} project={project} />
           ))}
           
