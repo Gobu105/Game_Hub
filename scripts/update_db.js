@@ -5,7 +5,7 @@ const dotenv = require('dotenv')
 dotenv.config({ path: '.env.local' })
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY // Need service role key to bypass RLS/Auth easily
 
 if (!supabaseUrl || !supabaseServiceKey) {
   console.error("Please add SUPABASE_SERVICE_ROLE_KEY to .env.local to run this script.")
@@ -15,98 +15,60 @@ if (!supabaseUrl || !supabaseServiceKey) {
 const supabase = createClient(supabaseUrl, supabaseServiceKey)
 
 async function seed() {
-  console.log("1. Wiping old data...")
+  console.log("Setting up users...")
   
-  // Wipe all projects and comments
-  await supabase.from('comments').delete().neq('id', '00000000-0000-0000-0000-000000000000')
-  await supabase.from('projects').delete().neq('id', '00000000-0000-0000-0000-000000000000')
+  // 1. Create Moon
+  const { data: moonData, error: moonError } = await supabase.auth.admin.createUser({
+    email: 'moon@gamehub.com',
+    password: 'athxrvxaa',
+    email_confirm: true,
+    user_metadata: { role: 'developer', full_name: 'moon' }
+  })
+  
+  if (moonError) console.log("Moon creation error (might exist):", moonError.message)
+  const moonId = moonData?.user?.id
 
-  // Wipe all users
-  const { data: { users } } = await supabase.auth.admin.listUsers()
-  for (const u of users) {
-    await supabase.auth.admin.deleteUser(u.id)
+  // 2. Create Pushkqr
+  const { data: pushData, error: pushError } = await supabase.auth.admin.createUser({
+    email: 'pushkqr@gamehub.com',
+    password: 'pushkar@123',
+    email_confirm: true,
+    user_metadata: { role: 'developer', full_name: 'Pushkqr' }
+  })
+  
+  if (pushError) console.log("Pushkqr creation error (might exist):", pushError.message)
+  const pushId = pushData?.user?.id
+
+  console.log("Updating projects...")
+
+  // 3. Delete Brahmin Simulator
+  await supabase.from('projects').delete().ilike('title', '%Brahmin%')
+
+  // 4. Update Cigarette Counter
+  if (moonId) {
+    await supabase.from('projects')
+      .update({ 
+        link: 'https://cigg-tracker.onrender.com',
+        developer_id: moonId 
+      })
+      .ilike('title', '%Cigarette%')
   }
 
-  console.log("2. Creating the 5 new accounts...")
-
-  // Accounts to create
-  const accounts = [
-    { email: 'gobu105@gamehub.local', password: 'Jatin@joshi105', role: 'super_admin', username: 'Gobu105' },
-    { email: 'pushkqr@gamehub.local', password: 'pushkar@123', role: 'developer', username: 'pushkqr' },
-    { email: 'athxrvxaa@gamehub.local', password: 'athxrvxaa', role: 'developer', username: 'athxrvxaa' },
-    { email: 'player1@gamehub.local', password: 'password123', role: 'user', username: 'player1' },
-    { email: 'player2@gamehub.local', password: 'password123', role: 'user', username: 'player2' },
-  ]
-
-  const userIds = {}
-
-  for (const acc of accounts) {
-    const { data } = await supabase.auth.admin.createUser({
-      email: acc.email,
-      password: acc.password,
-      email_confirm: true,
-      user_metadata: { role: acc.role, username: acc.username }
-    })
-    if (data?.user) {
-      userIds[acc.username] = data.user.id
-      console.log(`Created ${acc.username}`)
-    }
-  }
-
-  console.log("3. Adding Projects...")
-
-  if (userIds['pushkqr']) {
+  // 5. Add Stonk Royale
+  if (pushId) {
     await supabase.from('projects').insert([
       {
-        id: 'stonk-royale',
         title: 'Stonk Royale',
         tagline: 'Trade stocks like a battle royale.',
         overview: 'Experience the thrill of the stock market in a fast-paced, competitive environment.',
         icon: '📈',
         link: 'https://stonkroyale.me/',
-        developer_id: userIds['pushkqr']
+        developer_id: pushId
       }
     ])
   }
 
-  if (userIds['athxrvxaa']) {
-    await supabase.from('projects').insert([
-      {
-        id: 'cigarette-counter',
-        title: 'Cigarette Counter',
-        tagline: 'Track your smoking habits.',
-        overview: 'A simple app designed to help you monitor and eventually reduce your daily cigarette intake.',
-        icon: '🚬',
-        link: 'https://cigg-tracker.onrender.com',
-        developer_id: userIds['athxrvxaa']
-      }
-    ])
-  }
-
-  console.log("4. Adding Mock Feedback...")
-  
-  if (userIds['player1'] && userIds['player2']) {
-    await supabase.from('comments').insert([
-      {
-        project_id: 'stonk-royale',
-        user_id: userIds['player1'],
-        user_name: 'player1',
-        text: 'This game is crazy! Lost all my virtual money in 5 minutes.',
-        rating: 5,
-        is_bug_report: false
-      },
-      {
-        project_id: 'cigarette-counter',
-        user_id: userIds['player2'],
-        user_name: 'player2',
-        text: 'The counter resets if I refresh the page too fast.',
-        is_bug_report: true,
-        status: 'Open'
-      }
-    ])
-  }
-
-  console.log("Database reset and seeded successfully!")
+  console.log("Database update complete!")
 }
 
 seed()

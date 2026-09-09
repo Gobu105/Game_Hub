@@ -6,19 +6,10 @@ import { createClient } from '@/utils/supabase/server'
 import { headers } from 'next/headers'
 
 // Existing Email/Password Functions
-// Helper to convert usernames to a dummy email for Supabase Auth
-function getEmailFromIdentifier(identifier: string) {
-  if (identifier.includes('@')) return identifier;
-  return `${identifier}@gamehub.local`;
-}
-
 export async function login(formData: FormData) {
   const supabase = await createClient()
-  const identifier = formData.get('identifier') as string
-  const email = getEmailFromIdentifier(identifier)
-
   const data = {
-    email,
+    email: formData.get('email') as string,
     password: formData.get('password') as string,
   }
   const { error } = await supabase.auth.signInWithPassword(data)
@@ -29,17 +20,13 @@ export async function login(formData: FormData) {
 
 export async function signup(formData: FormData) {
   const supabase = await createClient()
-  const identifier = formData.get('identifier') as string
-  const username = formData.get('username') as string
-  const email = getEmailFromIdentifier(identifier)
-
   const data = {
-    email,
+    email: formData.get('email') as string,
     password: formData.get('password') as string,
     options: {
       data: {
         role: formData.get('role') as string || 'user',
-        username: username,
+        full_name: formData.get('username') as string || '',
       }
     }
   }

@@ -18,7 +18,7 @@ export default function AuthForm({ error }: { error?: string }) {
         </div>
       )}
       
-      {/* Auth Form */}
+      {/* Email Form */}
       <form className="flex flex-col gap-4">
         {!isLogin && (
           <div>
@@ -28,20 +28,18 @@ export default function AuthForm({ error }: { error?: string }) {
               id="username"
               name="username"
               type="text"
-              required
+              required={!isLogin}
             />
           </div>
         )}
         
         <div>
-          <label className="block text-sm font-medium text-gray-400 mb-1" htmlFor="identifier">
-            {isLogin ? 'Username or Email' : 'Email Address'}
-          </label>
+          <label className="block text-sm font-medium text-gray-400 mb-1" htmlFor="email">Email</label>
           <input
             className="w-full px-4 py-2 bg-gray-950 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-indigo-500"
-            id="identifier"
-            name="identifier"
-            type={isLogin ? "text" : "email"}
+            id="email"
+            name="email"
+            type="email"
             required
           />
         </div>
