@@ -1,9 +1,9 @@
 import ProjectCard from '@/components/ProjectCard';
 import { supabase } from '@/lib/supabase';
 
-// Setting this prevents Next.js from caching the page statically at build time,
-// ensuring it always fetches the latest data from Supabase.
-export const revalidate = 0;
+// Setting this forces Next.js to dynamically render the page on every request,
+// ensuring it never caches old database entries on Vercel.
+export const dynamic = 'force-dynamic';
 
 export default async function Home() {
   // Fetch projects from Supabase
