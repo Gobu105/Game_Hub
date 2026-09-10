@@ -64,16 +64,15 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
       <div className="grid grid-cols-1 md:grid-cols-3 gap-10 mb-16">
         <div className="md:col-span-2">
           <h2 className="text-2xl font-bold mb-4 border-b border-gray-800 pb-2">Overview</h2>
-          <p className="text-gray-300 leading-relaxed">{project.overview}</p>
+          <p className="text-gray-300 leading-relaxed whitespace-pre-wrap">{project.overview}</p>
           
           <h2 className="text-2xl font-bold mt-10 mb-4 border-b border-gray-800 pb-2">What's New</h2>
           <div className="space-y-4">
             <div className="bg-gray-900 rounded-lg p-4 border border-gray-800">
               <div className="flex justify-between items-center mb-2">
-                <span className="font-bold text-white">Version 1.0.0</span>
-                <span className="text-sm text-gray-500">Initial Release</span>
+                <span className="font-bold text-white">Latest Update</span>
               </div>
-              <p className="text-gray-400">Welcome to {project.title}!</p>
+              <p className="text-gray-400 whitespace-pre-wrap">{project.whats_new || `Welcome to ${project.title}!`}</p>
             </div>
           </div>
         </div>
@@ -81,11 +80,17 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
         <div className="md:col-span-1">
           <h2 className="text-2xl font-bold mb-4 border-b border-gray-800 pb-2">Screenshots</h2>
           <div className="space-y-4">
-            {[1, 2].map((ss) => (
-              <div key={ss} className="bg-gray-800 aspect-[9/16] rounded-xl flex items-center justify-center text-gray-600 border border-gray-700 overflow-hidden">
-                <span className="text-sm">Placeholder {ss}</span>
+            {project.screenshots && project.screenshots.length > 0 ? (
+              project.screenshots.map((ss: string, idx: number) => (
+                <div key={idx} className="bg-gray-800 rounded-xl overflow-hidden border border-gray-700">
+                  <img src={ss} alt={`Screenshot ${idx + 1}`} className="w-full h-auto object-cover" />
+                </div>
+              ))
+            ) : (
+              <div className="bg-gray-900 aspect-video rounded-xl flex items-center justify-center text-gray-600 border border-gray-800">
+                <span className="text-sm">No screenshots uploaded</span>
               </div>
-            ))}
+            )}
           </div>
         </div>
       </div>

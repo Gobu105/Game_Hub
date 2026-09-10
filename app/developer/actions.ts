@@ -12,17 +12,21 @@ export async function submitProject(formData: FormData) {
   const title = formData.get('title') as string
   const tagline = formData.get('tagline') as string
   const overview = formData.get('overview') as string
+  const whats_new = formData.get('whats_new') as string
   const link = formData.get('link') as string
   const icon = formData.get('icon') as string
   const github_url = formData.get('github_url') as string
+  const screenshots = (formData.get('screenshots') as string)?.split(',').map(s => s.trim()).filter(s => s) || []
 
   const { error } = await supabase.from('projects').insert({
     title,
     tagline,
     overview,
+    whats_new,
     link,
     icon,
     github_url,
+    screenshots,
     developer_id: user.id,
     status: 'pending' // Admin must approve
   })
@@ -43,18 +47,22 @@ export async function editProject(formData: FormData) {
   const title = formData.get('title') as string
   const tagline = formData.get('tagline') as string
   const overview = formData.get('overview') as string
+  const whats_new = formData.get('whats_new') as string
   const link = formData.get('link') as string
   const icon = formData.get('icon') as string
   const github_url = formData.get('github_url') as string
+  const screenshots = (formData.get('screenshots') as string)?.split(',').map(s => s.trim()).filter(s => s) || []
 
   // Update only if they own it
   const { error } = await supabase.from('projects').update({
     title,
     tagline,
     overview,
+    whats_new,
     link,
     icon,
     github_url,
+    screenshots,
   }).match({ id: projectId, developer_id: user.id })
 
   if (error) return { error: error.message }

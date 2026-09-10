@@ -64,9 +64,20 @@ export default function EditGameForm({ project }: { project: any }) {
           </div>
         </div>
 
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-xs font-medium text-gray-400 mb-1" htmlFor="overview">Full Overview / Description</label>
+            <textarea className="w-full px-3 py-1.5 bg-gray-900 border border-gray-700 rounded-lg text-white text-sm h-20" id="overview" name="overview" defaultValue={project.overview} required />
+          </div>
+          <div>
+            <label className="block text-xs font-medium text-gray-400 mb-1" htmlFor="whats_new">What's New in this Version?</label>
+            <textarea className="w-full px-3 py-1.5 bg-gray-900 border border-gray-700 rounded-lg text-white text-sm h-20" id="whats_new" name="whats_new" defaultValue={project.whats_new || ''} />
+          </div>
+        </div>
+
         <div>
-          <label className="block text-xs font-medium text-gray-400 mb-1" htmlFor="overview">Full Overview / Description</label>
-          <textarea className="w-full px-3 py-1.5 bg-gray-900 border border-gray-700 rounded-lg text-white text-sm h-20" id="overview" name="overview" defaultValue={project.overview} required />
+          <label className="block text-xs font-medium text-gray-400 mb-1" htmlFor="screenshots">Screenshot URLs (comma-separated)</label>
+          <input className="w-full px-3 py-1.5 bg-gray-900 border border-gray-700 rounded-lg text-white text-sm" id="screenshots" name="screenshots" defaultValue={(project.screenshots || []).join(', ')} placeholder="https://image1.jpg, https://image2.jpg" />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

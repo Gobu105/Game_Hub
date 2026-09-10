@@ -62,9 +62,20 @@ export default function SubmitGameForm() {
           </div>
         </div>
 
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-400 mb-1" htmlFor="overview">Full Overview / Description</label>
+            <textarea className="w-full px-4 py-2 bg-gray-950 border border-gray-700 rounded-lg text-white h-24" id="overview" name="overview" required />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-400 mb-1" htmlFor="whats_new">What's New?</label>
+            <textarea className="w-full px-4 py-2 bg-gray-950 border border-gray-700 rounded-lg text-white h-24" id="whats_new" name="whats_new" placeholder="Patch notes..." />
+          </div>
+        </div>
+
         <div>
-          <label className="block text-sm font-medium text-gray-400 mb-1" htmlFor="overview">Full Overview / Description</label>
-          <textarea className="w-full px-4 py-2 bg-gray-950 border border-gray-700 rounded-lg text-white h-24" id="overview" name="overview" required />
+          <label className="block text-sm font-medium text-gray-400 mb-1" htmlFor="screenshots">Screenshot URLs (comma-separated)</label>
+          <input className="w-full px-4 py-2 bg-gray-950 border border-gray-700 rounded-lg text-white" id="screenshots" name="screenshots" placeholder="https://image1.jpg, https://image2.jpg" />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
