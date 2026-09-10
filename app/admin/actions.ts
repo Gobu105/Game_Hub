@@ -13,30 +13,28 @@ async function checkIsAdmin() {
 }
 
 export async function updateProjectStatus(formData: FormData) {
-  if (!(await checkIsAdmin())) return { error: 'Unauthorized' }
+  if (!(await checkIsAdmin())) return
   
   const supabase = await createClient()
   const projectId = formData.get('project_id') as string
   const status = formData.get('status') as string
 
   const { error } = await supabase.from('projects').update({ status }).eq('id', projectId)
-  if (error) return { error: error.message }
+  if (error) console.error(error.message)
 
   revalidatePath('/admin')
   revalidatePath('/')
-  return { success: true }
 }
 
 export async function updateUserRole(formData: FormData) {
-  if (!(await checkIsAdmin())) return { error: 'Unauthorized' }
+  if (!(await checkIsAdmin())) return
 
   const supabase = await createClient()
   const targetUserId = formData.get('user_id') as string
   const role = formData.get('role') as string // 'user', 'developer', 'banned'
 
   const { error } = await supabase.from('profiles').update({ role }).eq('id', targetUserId)
-  if (error) return { error: error.message }
+  if (error) console.error(error.message)
 
   revalidatePath('/admin')
-  return { success: true }
 }
