@@ -32,7 +32,7 @@ export default function EditGameForm({ project }: { project: any }) {
     return (
       <button 
         onClick={() => setIsOpen(true)}
-        className="text-sm text-gray-400 hover:text-white"
+        className="text-xs font-medium bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 rounded-md transition-colors"
       >
         Edit Details
       </button>

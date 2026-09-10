@@ -30,7 +30,7 @@ export default function SubmitGameForm() {
     return (
       <button 
         onClick={() => setIsOpen(true)}
-        className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+        className="bg-white hover:bg-gray-200 text-black px-4 py-2 rounded-md font-medium text-sm transition-colors shadow-sm"
       >
         + Submit New Game
       </button>
